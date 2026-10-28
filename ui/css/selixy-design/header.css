@@ -1,0 +1,50 @@
+/* En-tête de Miraxy : barre plate, burger + marque + onglets à gauche, compte à droite.
+   Sous 900 px, les onglets disparaissent et la marque (logo + titre) se centre ; au-delà, logo seul. */
+.header {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; min-height: 40px;
+  padding: 0 8px 0 .6rem;
+  border-bottom: 1px solid var(--border);
+}
+/* Le verre est sur un pseudo-élément : un en-tête qui porterait lui-même backdrop-filter deviendrait la « racine de fond »
+   de ses menus et leur flou ne verrait plus la page (menus du burger, panneaux). */
+.header::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: color-mix(in srgb, var(--glass-tint) var(--header-shift), transparent);
+  backdrop-filter: blur(var(--header-blur)); -webkit-backdrop-filter: blur(var(--header-blur));
+}
+.header-start { display: flex; align-items: center; gap: 4px; }
+.header-tabs { display: flex; align-items: center; }
+.header-account { margin-left: auto; display: flex; align-items: center; }
+
+/* marque : le logo est un masque teinté par currentColor ; un projet change l'image par --header-logo */
+.header-brand {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 8px;
+  color: var(--text-h); font-weight: 700; font-size: 15px; letter-spacing: -0.01em; cursor: default; user-select: none;
+}
+.header-brand .header-logo {
+  display: inline-block; width: 22px; height: 22px; background-color: currentColor;
+  -webkit-mask: var(--header-logo, url(/assets/logo.svg)) no-repeat center / contain;
+  mask: var(--header-logo, url(/assets/logo.svg)) no-repeat center / contain;
+}
+
+/* onglets plats */
+.tab {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  flex: 0 0 auto; min-width: 80px; min-height: 40px; padding: 0 12px;
+  font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap;
+  color: var(--text-dim); transition: color .15s ease;
+}
+.tab:hover { color: var(--text); }
+span.tab { cursor: default; color: var(--text-h); }
+button.tab { font-family: inherit; background: transparent; border: 0; border-radius: 0; cursor: pointer; }
+.tab[aria-current='page'], .tab[aria-current='true'] { color: var(--text-h); }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+
+@media (min-width: 900px) {
+  .header-brand .header-title { display: none; }
+}
+@media (max-width: 899px) {
+  .header-tabs { display: none; }
+  .header-brand { position: absolute; left: 50%; transform: translateX(-50%); }
+}

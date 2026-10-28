@@ -1,0 +1,17 @@
+# Workspace Rust : serveur, daemon (poste utilisateur), common (protocole partagé).
+# L'ui n'est pas un crate : fichiers statiques servis par le serveur.
+[workspace]
+resolver = "2"
+members = ["server", "daemon", "common"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+authors = ["Sorën Bouloizeau"]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = "symbols"

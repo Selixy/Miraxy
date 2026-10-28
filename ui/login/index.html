@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f5f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#15141c" media="(prefers-color-scheme: dark)">
+  <title>Login · Miraxy</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/main.css?v=8">
+</head>
+<body>
+  <header class="header">
+    <div class="header-start">
+      <details class="burger">
+        <summary aria-label="Menu"><span class="burger-icon" aria-hidden="true"><span class="burger-bar burger-bar--1"></span><span class="burger-bar burger-bar--2"></span><span class="burger-bar burger-bar--3"></span></span></summary>
+        <ul class="burger-menu panel panel-list">
+          <li><a href="/">Accueil</a></li>
+        </ul>
+      </details>
+      <div class="header-brand">
+        <span class="header-logo" aria-hidden="true"></span>
+        <span class="header-title">Miraxy</span>
+      </div>
+      <nav class="header-tabs" aria-label="Pages">
+        <a class="tab" href="/">Accueil</a>
+      </nav>
+    </div>
+    <nav class="header-account" aria-label="Compte">
+      <a class="tab underline-fade" href="/login/" aria-current="page">Login</a>
+    </nav>
+  </header>
+  <main>
+    <form class="card" data-endpoint="/api/login">
+      <h1>Login</h1>
+      <div class="field">
+        <label for="email">Adresse e-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="error" role="alert" hidden></p>
+      <button class="button button--primary" type="submit">Se connecter</button>
+      <p class="hint">Pas encore de compte ? <a href="/signup/">Créer un compte</a></p>
+    </form>
+  </main>
+  <script type="module" src="/js/pages/login.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+# @DOMAIN@ : réseau privé entre le serveur et sa base (généré par deploy/setup.sh).
+[Network]
+NetworkName=selixy-miraxy

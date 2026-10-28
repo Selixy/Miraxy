@@ -1,0 +1,18 @@
+# Image de production : serveur + ui. Le daemon n'en fait pas partie (livré à part).
+# L'utilisateur d'exécution est fixé par le quadlet (User=), pas par l'image.
+# Les tests tournent pendant la construction : un échec empêche le déploiement.
+FROM docker.io/library/rust:1.99-bookworm AS build
+WORKDIR /src
+COPY Cargo.toml Cargo.lock ./
+COPY common common
+COPY server server
+COPY daemon daemon
+COPY ui ui
+RUN cargo test --release -p miraxy-common -p miraxy-server \
+    && cargo build --release -p miraxy-server
+
+FROM docker.io/library/debian:bookworm-slim
+COPY --from=build /src/target/release/miraxy-server /usr/local/bin/miraxy-server
+COPY ui /app/ui
+EXPOSE 8080
+ENTRYPOINT ["/usr/local/bin/miraxy-server"]

@@ -1,0 +1,23 @@
+/* Échelle typographique : un bloc .text, une taille et au plus une tonalité en modificateurs.
+   <p class="text text--body-lg text--dim"> ; sans tonalité, le texte garde la couleur héritée. */
+.text { font-family: var(--sans); }
+
+.text--display-lg, .text--display, .text--heading {
+  font-family: var(--display); letter-spacing: -0.015em; overflow-wrap: break-word;
+}
+.text--display-lg { font-size: clamp(2rem, 9vw, 3rem); line-height: 1.05; font-weight: 700; }
+.text--display { font-size: clamp(1.75rem, 7vw, 2.25rem); line-height: 1.1; font-weight: 700; }
+.text--heading { font-size: 1.5rem; line-height: 1.25; font-weight: 600; }
+
+.text--eyebrow { font-size: .875rem; line-height: 1.25; font-weight: 600; text-transform: uppercase; letter-spacing: .15em; }
+.text--body-lg { font-size: 1.125rem; line-height: 1.6; font-weight: 400; }
+.text--body { font-size: 1rem; line-height: 1.5; font-weight: 400; }
+.text--body-sm { font-size: .875rem; line-height: 1.45; font-weight: 400; }
+.text--caption { font-size: .875rem; line-height: 1.4; font-weight: 500; }
+.text--micro { font-size: .75rem; line-height: 1.4; font-weight: 500; }
+.text--mono { font-family: var(--mono); font-size: .875rem; line-height: 1.4; }
+
+.text--strong { color: var(--text-h); }
+.text--soft { color: var(--text); }
+.text--dim { color: var(--text-dim); }
+.text--accent { color: var(--accent); }

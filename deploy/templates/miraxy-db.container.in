@@ -1,0 +1,35 @@
+# @DOMAIN@ : quadlet de PostgreSQL généré par deploy/setup.sh (ne pas éditer à la main, éditer le modèle).
+# Aucun port publié : seul le serveur Miraxy l'atteint, par le réseau selixy-miraxy.
+[Unit]
+Description=Miraxy PostgreSQL (@DOMAIN@)
+After=network-online.target
+
+[Container]
+ContainerName=selixy-miraxy-db
+Image=docker.io/library/postgres:17-bookworm
+Network=selixy-miraxy.network
+# Directement sous l'utilisateur postgres de l'image : sans root, l'entrée n'essaie pas de chown/gosu.
+User=999
+Group=999
+DropCapability=ALL
+NoNewPrivileges=true
+ReadOnly=true
+Tmpfs=/tmp:size=64m
+Tmpfs=/run/postgresql:size=8m,mode=1777
+Memory=@DB_MEMORY_LIMIT@
+PidsLimit=256
+LogDriver=journald
+PodmanArgs=--http-proxy=false
+EnvironmentFile=@SECRETS_DIR@/db.env
+Environment=POSTGRES_USER=miraxy
+Environment=POSTGRES_DB=miraxy
+Volume=@DB_DIR@:/var/lib/postgresql/data:Z
+HealthCmd=pg_isready -U miraxy -d miraxy
+HealthInterval=30s
+
+[Service]
+Restart=always
+TimeoutStartSec=120
+
+[Install]
+WantedBy=default.target

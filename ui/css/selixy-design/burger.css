@@ -1,0 +1,29 @@
+/* Burger de Miraxy : trois barres plates, sans fond, qui se changent en croix à l'ouverture (<details>, sans JS).
+   Visible sous 900 px ; .burger--desktop le garde au-delà. Le menu est un .panel.panel-list sous le bouton. */
+.burger { position: relative; display: inline-flex; align-items: center; }
+.burger > summary {
+  display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0;
+  list-style: none; cursor: pointer; color: var(--text-h); background: transparent; border: 0; border-radius: 0;
+  transition: color .15s ease;
+}
+.burger > summary::-webkit-details-marker { display: none; }
+.burger > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.burger-menu { position: absolute; top: calc(100% + 6px); left: 0; min-width: 190px; z-index: 100; }
+/* collé sous l'en-tête et au bord gauche de l'écran */
+.burger-menu--docked { position: fixed; top: var(--header-height); left: 0; }
+
+.burger-icon { position: relative; display: block; width: 18px; height: 12px; }
+.burger-bar {
+  position: absolute; left: 0; width: 100%; height: 2px; background-color: currentColor; border-radius: 2px;
+  transition: transform .25s cubic-bezier(.4, 0, .2, 1), opacity .2s ease;
+}
+.burger-bar--1 { top: 0; transform-origin: center; }
+.burger-bar--2 { top: 5px; }
+.burger-bar--3 { top: 10px; transform-origin: center; }
+.burger[open] .burger-bar--1 { transform: translateY(5px) rotate(45deg); }
+.burger[open] .burger-bar--2 { opacity: 0; transform: scaleX(0); }
+.burger[open] .burger-bar--3 { transform: translateY(-5px) rotate(-45deg); }
+
+@media (min-width: 900px) {
+  .burger:not(.burger--desktop) { display: none; }
+}

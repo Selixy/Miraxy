@@ -1,0 +1,11 @@
+/* Soulignement estompé de Miraxy (dégradé en Oklab) : onglet courant ; -v en variante verticale. */
+.underline-fade { position: relative; }
+.underline-fade::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; pointer-events: none;
+  background: linear-gradient(to right in oklab, transparent 0%, 30%, var(--accent) 50%, 70%, transparent 100%);
+}
+.underline-fade-v { position: relative; }
+.underline-fade-v::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 1px; pointer-events: none;
+  background: linear-gradient(to bottom in oklab, transparent 0%, 30%, var(--accent) 50%, 70%, transparent 100%);
+}

@@ -1,0 +1,36 @@
+/* Panneau à plat : quatre coins pilotables un par un. Angles vifs par défaut ; .panel--round-tl/-tr/-br/-bl arrondissent
+   un coin, .panel--round les quatre, du rayon global --panel-radius (tokens.css). .panel-list en fait une liste de liens. */
+.panel {
+  --radius-tl: 0px; --radius-tr: 0px; --radius-br: 0px; --radius-bl: 0px;
+  background: color-mix(in srgb, var(--glass-tint) var(--panel-shift), transparent); border: 0; backdrop-filter: blur(var(--panel-blur)); -webkit-backdrop-filter: blur(var(--panel-blur));
+  border-radius: var(--radius-tl) var(--radius-tr) var(--radius-br) var(--radius-bl);
+}
+.panel--round    { --radius-tl: var(--panel-radius); --radius-tr: var(--panel-radius); --radius-br: var(--panel-radius); --radius-bl: var(--panel-radius); }
+.panel--round-tl { --radius-tl: var(--panel-radius); }
+.panel--round-tr { --radius-tr: var(--panel-radius); }
+.panel--round-br { --radius-br: var(--panel-radius); }
+.panel--round-bl { --radius-bl: var(--panel-radius); }
+.panel--sharp   { --radius-tl: 0px; --radius-tr: 0px; --radius-br: 0px; --radius-bl: 0px; }
+.panel--sharp-t { --radius-tl: 0px; --radius-tr: 0px; }
+.panel--sharp-b { --radius-bl: 0px; --radius-br: 0px; }
+.panel--sharp-l { --radius-tl: 0px; --radius-bl: 0px; }
+.panel--sharp-r { --radius-tr: 0px; --radius-br: 0px; }
+
+.panel-list { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 4px; list-style: none; }
+.panel-list a, .panel-list button, .panel-item {
+  position: relative; display: flex; align-items: center; width: 100%; min-height: 38px; padding: 8px 12px;
+  font-family: inherit; font-size: 14px; font-weight: 500; text-decoration: none; text-align: left;
+  color: var(--text-dim); background: transparent; border: 0; border-radius: 0;
+  cursor: pointer; transition: background .15s ease, color .15s ease;
+}
+.panel-list a:hover, .panel-list button:hover, .panel-item:hover { color: var(--text-h); background: var(--bg-2); }
+.panel-list a:focus-visible, .panel-list button:focus-visible, .panel-item:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: -2px;
+}
+/* actif : pas de fond teinté, texte contrasté */
+.panel-list a[aria-current='page'], .panel-list a.is-active, .panel-list button.is-active, .panel-item.is-active {
+  color: var(--text-h); background: transparent; font-weight: 600;
+}
+.panel-list a::after, .panel-list button::after, .panel-item::after { content: none !important; }
+.panel-label { display: block; padding: 8px 12px 4px; font-size: 13px; font-weight: 600; color: var(--text-h); }
+.panel-separator { height: 1px; margin: 4px 6px; list-style: none; background: var(--border); }

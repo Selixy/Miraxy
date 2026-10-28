@@ -1,0 +1,139 @@
+/* Jetons de design : seule source des couleurs, ombres, polices et espacements.
+   Une seule couleur d'accent, le reste en neutres. Le thème suit le système, sans JavaScript ;
+   un projet qui propose une bascule pose html[data-theme="light"|"dark"], qui l'emporte. */
+:root {
+  --bg-0: #f6f5f9;
+  --bg-1: #ffffff;
+  --bg-2: #edeaf3;
+  --bg-3: #e2deec;
+
+  --text: #2e2a3a;
+  --text-h: #1b1532;
+  --text-dim: #716b8c;
+  --border: #e4dff2;
+  --border-strong: #d1cae6;
+
+  --accent: #2a159d;
+  --accent-strong: #241287;
+  --accent-bg: rgba(43, 21, 158, 0.08);
+  --on-accent: #ffffff;
+
+  --warning: #8a5a00;
+
+  --panel-radius: 16px;
+  --glass-tint: black;
+  --panel-shift: 5%;
+  --panel-blur: 14px;
+  --header-shift: 7%;
+  --header-blur: 28px;
+  --header-height: 41px;
+  --card-height: 100svh;
+  --card-radius: 16px;
+  --button-height: 48px;
+  --button-height-s: 36px;
+  --button-height-l: 64px;
+  --button-radius: 16px;
+  --button-pad: 1.1rem;
+  --button-veil: color-mix(in srgb, var(--bg-1) 55%, transparent);
+  --button-shift: 9%;
+  --button-shift-hover: 18%;
+  --button-grow: 4px;
+  --field-height: 56px;
+  --field-pad: 1rem;
+  --field-shift: 9%;
+  --field-focus-shift: 15%;
+  --field-bar: 4px;
+  --banner-shift: 16%;
+  --danger: #b3261e;
+  --on-danger: #ffffff;
+  --card-hover-scale: 1.04;
+  --cards-columns: 7fr 5fr 6fr;
+  --cards-row: 2rem;
+  --cards-gap: 1rem;
+  --shadow-1: none;
+  --shadow-2: none;
+  --shadow-3: none;
+
+  /* les familles « Variable » sont celles qu'un projet auto-héberge ; sinon la police installée, puis le système */
+  --sans: 'Inter Variable', 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --display: 'Geist Variable', 'Geist', var(--sans);
+  --mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --transition-fast: 150ms ease-out;
+  --transition: 200ms ease-out;
+  --transition-slow: 300ms ease-out;
+
+  --space-1: .5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --content-width: 64rem;
+
+  color-scheme: light;
+}
+
+/* Thème sombre : une fois pour le système (sauf clair forcé), une fois pour le sombre forcé. Mêmes valeurs. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-0: #15141c;
+    --bg-1: #1f1e29;
+    --bg-2: #292735;
+    --bg-3: #353246;
+
+    --text: #cdc9dd;
+    --text-h: #f2effb;
+    --text-dim: #9a93b5;
+    --border: #322f41;
+    --border-strong: #423e56;
+
+    --accent: #a99cff;
+    --accent-strong: #c6bdff;
+    --accent-bg: rgba(169, 156, 255, 0.14);
+    --on-accent: #15141c;
+
+    --warning: #f0c268;
+
+    --danger: #ff8a80;
+    --on-danger: #15141c;
+    --glass-tint: white;
+    --shadow-1: none;
+    --shadow-2: none;
+    --shadow-3: none;
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg-0: #15141c;
+  --bg-1: #1f1e29;
+  --bg-2: #292735;
+  --bg-3: #353246;
+
+  --text: #cdc9dd;
+  --text-h: #f2effb;
+  --text-dim: #9a93b5;
+  --border: #322f41;
+  --border-strong: #423e56;
+
+  --accent: #a99cff;
+  --accent-strong: #c6bdff;
+  --accent-bg: rgba(169, 156, 255, 0.14);
+  --on-accent: #15141c;
+
+  --warning: #f0c268;
+
+  --danger: #ff8a80;
+  --on-danger: #15141c;
+  --glass-tint: white;
+  --shadow-1: none;
+  --shadow-2: none;
+  --shadow-3: none;
+
+  color-scheme: dark;
+}

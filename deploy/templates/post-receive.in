@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Hook post-receive de @ROOT_DIR@/miraxy.git (généré par deploy/setup.sh).
+# Construit l'image (tests inclus), redémarre le service, revient en arrière si la santé échoue.
+set -euo pipefail
+
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+
+REPO="@ROOT_DIR@/miraxy.git"
+SOURCE="@ROOT_DIR@/source"
+SERVICE=selixy-miraxy.service
+IMAGE=localhost/selixy-miraxy
+HEALTH_URL="http://127.0.0.1:@HOST_PORT@/api/health"
+
+received=0
+while read -r _old _new ref; do
+  [ "$ref" = "refs/heads/main" ] && received=1
+done
+[ "$received" -eq 1 ] || { echo ">> Pas de mise à jour de main, rien à déployer."; exit 0; }
+
+mkdir -p "$SOURCE"
+git --git-dir="$REPO" --work-tree="$SOURCE" checkout -f main
+short=$(git --git-dir="$REPO" rev-parse --short=12 main)
+
+if [ "$(git --git-dir="$REPO" rev-parse main:deploy)" != "$(cat @ROOT_DIR@/setup.tree 2>/dev/null || true)" ]; then
+  echo ">> ATTENTION : deploy/ a changé depuis le dernier setup. Relancer deploy/setup.sh depuis le portable."
+fi
+
+echo ">> Construction de l'image $short (les tests tournent pendant le build)"
+previous=$(podman image inspect --format '{{.Id}}' "$IMAGE:latest" 2>/dev/null || true)
+if ! podman build -f "$SOURCE/deploy/Containerfile" -t "$IMAGE:$short" -t "$IMAGE:latest" "$SOURCE"; then
+  echo ">> ÉCHEC du build ou des tests : la version en service reste en place."
+  exit 1
+fi
+
+echo ">> Redémarrage de $SERVICE"
+systemctl --user restart "$SERVICE"
+
+echo ">> Attente de $HEALTH_URL (60 s maximum)"
+for _ in $(seq 1 30); do
+  if curl -fsS -o /dev/null "$HEALTH_URL" 2>/dev/null; then
+    echo ">> Miraxy $short en ligne."
+    exit 0
+  fi
+  sleep 2
+done
+
+echo ">> ÉCHEC de la santé. Journal :"
+journalctl --user -u "$SERVICE" -n 30 --no-pager || true
+if [ -n "$previous" ]; then
+  echo ">> Retour à la version précédente"
+  podman tag "$previous" "$IMAGE:latest"
+  systemctl --user restart "$SERVICE"
+fi
+exit 1

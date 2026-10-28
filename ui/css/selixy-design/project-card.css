@@ -1,0 +1,65 @@
+/* Card de projet (.project-card, pour ne pas heurter la .card de formulaire de base.css) : une couverture plein cadre et un panneau de verre (.panel) en bas. Toute la card est un lien.
+   Mobile : une card par écran, calée au défilement. Bureau (.project-cards--gallery, >= 900 px) : galerie en colonnes inégales
+   dont chaque card se place par --card-col / --card-row / --card-span ; le panneau se déploie au survol.
+   <a class="project-card"><span class="project-card__cover"></span><span class="project-card__panel panel">…</span></a> */
+.project-cards { display: block; }
+.project-card {
+  --card-fg: #fff; --card-tint: 40%;
+  --card-radius-tl: 0px; --card-radius-tr: 0px; --card-radius-br: 0px; --card-radius-bl: 0px;
+  position: relative; display: flex; align-items: flex-end; min-height: var(--card-height); overflow: hidden;
+  border-radius: var(--card-radius-tl) var(--card-radius-tr) var(--card-radius-br) var(--card-radius-bl);
+  color: var(--card-fg); text-decoration: none; background: var(--bg-2); scroll-snap-align: start;
+}
+.project-card--round-tl { --card-radius-tl: var(--card-radius); }
+.project-card--round-tr { --card-radius-tr: var(--card-radius); }
+.project-card--round-br { --card-radius-br: var(--card-radius); }
+.project-card--round-bl { --card-radius-bl: var(--card-radius); }
+.project-card__cover {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  background-image:
+    radial-gradient(circle at 80% 15%, color-mix(in srgb, var(--accent) calc(var(--card-tint) * .8), white) 0%, transparent 55%),
+    linear-gradient(155deg, color-mix(in srgb, var(--accent) var(--card-tint), black), color-mix(in srgb, var(--accent) calc(var(--card-tint) * .45), black));
+  transition: transform .4s ease-out;
+}
+.project-card__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .3s ease; }
+.project-card__video.is-playing { opacity: 1; }
+.project-card__cover--image { background-image: var(--card-image); }
+.project-card__cover--image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, .55), transparent 60%); }
+.project-card__panel { position: relative; display: block; width: 100%; padding: var(--space-3) var(--space-2) var(--space-4); }
+.project-card__eyebrow, .project-card__title, .project-card__lead { display: block; }
+.project-card__eyebrow { margin: 0; font: 500 .75rem var(--mono); text-transform: uppercase; letter-spacing: .06em; opacity: .85; }
+.project-card__title { margin: .3rem 0; font: 700 clamp(1.8rem, 8vw, 2.6rem)/1.1 var(--display); overflow-wrap: anywhere; }
+.project-card__lead { margin: 0 0 1rem; max-width: 34rem; }
+.project-card__tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; margin: 0; padding: 0; font: .75rem var(--mono); }
+.project-card__tag { padding: .15rem .5rem; background: rgba(255, 255, 255, .16); }
+.project-card__more { display: grid; grid-template-rows: 1fr; }
+.project-card__more-inner { min-height: 0; overflow: hidden; }
+.project-card:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+
+@media (max-width: 899px) {
+  :root:has(.project-cards) { scroll-snap-type: y proximity; }
+}
+
+@media (min-width: 900px) {
+  .project-cards--gallery {
+    display: grid; grid-template-columns: var(--cards-columns); grid-auto-rows: var(--cards-row); column-gap: var(--cards-gap);
+  }
+  .project-cards--gallery .project-card {
+    min-height: 0; grid-column: var(--card-col); grid-row: var(--card-row) / span var(--card-span);
+    margin-bottom: var(--cards-gap); scroll-snap-align: none;
+  }
+  .project-cards--gallery .project-card__panel { padding: var(--space-2); }
+  .project-cards--gallery .project-card__title { font-size: clamp(1.3rem, 1.8vw, 1.8rem); }
+  .project-cards--gallery .project-card--feature .project-card__title { font-size: clamp(1.8rem, 2.8vw, 2.6rem); }
+}
+@media (min-width: 900px) and (hover: hover) {
+  .project-cards--gallery .project-card__more { grid-template-rows: 0fr; transition: grid-template-rows var(--transition); }
+  .project-cards--gallery .project-card__kind { display: none; }
+  .project-cards--gallery .project-card:hover .project-card__more, .project-cards--gallery .project-card:focus-visible .project-card__more { grid-template-rows: 1fr; }
+  .project-cards--gallery .project-card:hover .project-card__kind, .project-cards--gallery .project-card:focus-visible .project-card__kind { display: inline; }
+  .project-cards--gallery .project-card:hover .project-card__cover, .project-cards--gallery .project-card:focus-visible .project-card__cover { transform: scale(var(--card-hover-scale)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card__cover, .project-card__more, .project-card__video { transition: none !important; }
+  .project-card__cover { transform: none !important; }
+}

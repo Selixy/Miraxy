@@ -1,0 +1,33 @@
+# @DOMAIN@ : quadlet généré par deploy/setup.sh (ne pas éditer à la main, éditer le modèle).
+[Unit]
+Description=Miraxy (@DOMAIN@)
+After=network-online.target selixy-miraxy-db.service
+Requires=selixy-miraxy-db.service
+
+[Container]
+ContainerName=selixy-miraxy
+Image=localhost/selixy-miraxy:latest
+User=@CONTAINER_UID@
+Group=@CONTAINER_UID@
+Network=selixy-miraxy.network
+DropCapability=ALL
+NoNewPrivileges=true
+ReadOnly=true
+Tmpfs=/tmp:size=64m
+Memory=@MEMORY_LIMIT@
+PidsLimit=128
+LogDriver=journald
+PodmanArgs=--http-proxy=false
+PublishPort=127.0.0.1:@HOST_PORT@:8080
+EnvironmentFile=@SECRETS_DIR@/secrets.env
+@ENVIRONMENT@
+Volume=@DATA_DIR@:/data:Z
+HealthCmd=/usr/local/bin/miraxy-server healthcheck
+HealthInterval=60s
+
+[Service]
+Restart=always
+TimeoutStartSec=120
+
+[Install]
+WantedBy=default.target

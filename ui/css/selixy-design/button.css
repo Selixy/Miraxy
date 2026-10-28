@@ -1,0 +1,64 @@
+/* Bouton : un petit panneau de verre (libellé) et une pastille carrée d'action (icône) à son extrémité.
+   <button class="button button--primary"><span class="button__label">Envoyer</span><span class="button__chip">
+   <svg class="button__icon">…</svg></span></button> ; sans __label ni __chip, le texte suffit (le primary devient plein accent).
+   Angles vifs, sauf le coin bas-droit (--button-radius-br) ; chaque coin se pilote par variable ou par .button--round-*. */
+.button {
+  --h: var(--button-height); --shift: var(--button-shift); --chip-bg: var(--accent); --chip-fg: var(--on-accent);
+  --button-radius-tl: 0px; --button-radius-tr: 0px; --button-radius-br: var(--button-radius); --button-radius-bl: 0px;
+  position: relative; display: inline-flex; align-items: stretch; box-sizing: border-box; height: var(--h); max-width: 100%;
+  margin: 0; padding: 0 var(--button-pad); overflow: hidden;
+  font: 500 .95rem/1.2 var(--sans); text-decoration: none; color: var(--text-h); cursor: pointer; border: 0;
+  border-radius: var(--button-radius-tl) var(--button-radius-tr) var(--button-radius-br) var(--button-radius-bl);
+  background:
+    linear-gradient(color-mix(in srgb, var(--glass-tint) var(--shift), transparent), color-mix(in srgb, var(--glass-tint) var(--shift), transparent)),
+    linear-gradient(var(--button-veil), var(--button-veil));
+  -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur));
+  transition: background var(--transition);
+}
+.button:has(.button__label, .button__chip) { padding: 0; }
+.button:not(:has(.button__label, .button__chip)) { align-items: center; }
+.button__label { display: flex; flex: 1; flex-direction: column; justify-content: center; align-items: flex-start; min-width: 0; padding: 0 var(--button-pad); white-space: nowrap; }
+.button__sub { max-width: 100%; overflow: hidden; text-overflow: ellipsis; font: .7rem var(--mono); color: var(--text-dim); }
+.button__chip {
+  display: grid; flex: none; place-items: center; width: var(--h);
+  color: var(--chip-fg); background: var(--chip-bg); transition: width var(--transition), background var(--transition);
+}
+.button__icon { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2; }
+
+.button--primary { --shift: calc(var(--button-shift) + 6%); }
+.button--primary:not(:has(.button__chip)) { color: var(--on-accent); background: var(--accent); }
+.button--primary:not(:has(.button__chip)):hover:not(:disabled) { background: var(--accent-strong); }
+.button--secondary { --chip-bg: color-mix(in srgb, var(--glass-tint) 12%, transparent); --chip-fg: var(--accent); }
+.button--danger { --chip-bg: var(--danger); --chip-fg: var(--on-danger); }
+.button--danger:not(:has(.button__chip)) { color: var(--danger); }
+.button--subtle { --shift: 0%; --chip-bg: var(--bg-3); --chip-fg: var(--accent); background: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.button--chip-start { flex-direction: row-reverse; }
+.button--s { --h: var(--button-height-s); --button-pad: .8rem; font-size: .82rem; }
+.button--l { --h: var(--button-height-l); --button-pad: 1.5rem; font-size: 1.05rem; }
+.button--icon { padding: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.button--block { display: flex; width: 100%; }
+
+.button--round { --button-radius-tl: var(--button-radius); --button-radius-tr: var(--button-radius); --button-radius-bl: var(--button-radius); }
+.button--round-tl { --button-radius-tl: var(--button-radius); }
+.button--round-tr { --button-radius-tr: var(--button-radius); }
+.button--round-br { --button-radius-br: var(--button-radius); }
+.button--round-bl { --button-radius-bl: var(--button-radius); }
+.button--sharp { --button-radius-br: 0px; }
+
+.button:hover { --shift: var(--button-shift-hover); }
+.button:hover .button__chip { width: calc(var(--h) + var(--button-grow)); }
+.button:active { --shift: calc(var(--button-shift-hover) + 8%); }
+.button:active .button__chip { width: var(--h); color: var(--bg-1); background: var(--text-h); }
+.button--danger:active .button__chip { background: color-mix(in srgb, var(--danger) 70%, var(--text-h)); }
+.button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.button:disabled, .button[aria-disabled="true"] {
+  --shift: 3%; --chip-bg: var(--bg-3); --chip-fg: var(--text-dim); color: var(--text-dim); cursor: not-allowed;
+}
+.button:disabled:hover .button__chip { width: var(--h); }
+.button[aria-busy="true"] { cursor: progress; pointer-events: none; }
+.button[aria-busy="true"] .button__icon { animation: button-spin 1s linear infinite; }
+@keyframes button-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .button, .button__chip { transition: none; }
+  .button[aria-busy="true"] .button__icon { animation: none; }
+}
